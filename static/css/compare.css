@@ -1,0 +1,67 @@
+.compare-header-row {
+    background: rgba(var(--card-bg-rgb), 0.9);
+    position: sticky;
+    top: 56px;
+    z-index: 5;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.compare-th {
+    padding: 20px;
+    text-align: center;
+    border-right: 1px solid var(--border-color);
+}
+
+.compare-th:last-child {
+    border-right: none;
+}
+
+.compare-cell {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
+}
+
+.compare-cell:last-child {
+    border-right: none;
+}
+
+.compare-row:hover .compare-cell {
+    background-color: rgba(var(--primary-rgb), 0.03);
+}
+
+.compare-label-column {
+    font-weight: 600;
+    background: rgba(var(--card-bg-rgb), 0.5);
+    color: var(--text-secondary);
+}
+
+.highlight-best-value {
+    background-color: rgba(6, 214, 160, 0.1) !important;
+    border: 2px solid var(--success-color);
+}
+
+.compare-image-wrap {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.compare-image-wrap img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+@media (max-width: 767.98px) {
+    .compare-container {
+        overflow-x: auto;
+    }
+
+    .compare-table {
+        min-width: 800px;
+    }
+}

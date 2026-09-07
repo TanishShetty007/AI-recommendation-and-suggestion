@@ -1,0 +1,127 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Price Drop Notifications - ShopSmart AI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-3 mb-4">
+            <div class="dashboard-sidebar p-3 py-4 animate-on-scroll" data-animation="fade-in">
+                <div class="text-center pb-4 mb-4 border-bottom">
+                    <img src="{{ current_user.avatar_url or 'https://api.dicebear.com/7.x/adventurer/svg?seed=Guest' }}"
+                        alt="Profile Avatar" class="rounded-circle border mb-3" width="80" height="80">
+                    <h5 class="fw-bold text-dark mb-1">{{ current_user.username }}</h5>
+                    <p class="text-secondarySmall text-secondary mb-0">{{ current_user.email }}</p>
+                </div>
+
+                <ul class="nav flex-column gap-2">
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.dashboard') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="fas fa-chart-pie me-2 text-secondary"></i> Overview Overview
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.wishlist') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="far fa-heart me-2 text-secondary"></i> My Wishlist
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.notifications') }}"
+                            class="nav-link active rounded-pill px-3 py-2 text-decoration-none d-flex align-items-center">
+                            <i class="far fa-bell me-2 text-primary"></i> <strong class="text-primary">Alerts
+                                History</strong>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.profile') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="far fa-user me-2 text-secondary"></i> Account Details
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.settings') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="fas fa-sliders-h me-2 text-secondary"></i> preferences
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Notifications Log Panel -->
+        <div class="col-lg-9">
+            <div class="card glass-card border-0 p-4 animate-on-scroll" data-animation="slide-up">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold text-dark mb-0"><i class="far fa-bell text-primary me-2"></i>My Price Alerts
+                        History</h5>
+                    <!-- Mock clear button -->
+                    <button class="btn btn-outline-custom btn-sm">Clear All</button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-borderless align-middle mb-0 text-dark" style="font-size:0.9rem;">
+                        <thead>
+                            <tr class="text-secondary border-bottom">
+                                <th>Product Details</th>
+                                <th>Store Deal</th>
+                                <th>Target Value</th>
+                                <th>Current Best</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for alert in alerts %}
+                            <tr class="border-bottom">
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img src="{{ alert.product.image_url }}" alt="" class="rounded" width="40"
+                                            height="40" style="object-fit:contain;">
+                                        <div>
+                                            <h6 class="mb-0 fw-semibold text-dark"
+                                                style="font-size:0.85rem; max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                                                {{ alert.product.name }}</h6>
+                                            <span class="text-secondarySmall text-secondary"
+                                                style="font-size:0.75rem;">Category: {{ alert.product.category }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="text-secondary fw-semibold">{{ alert.platform or 'Amazon' }}</span>
+                                </td>
+                                <td><span class="text-dark fw-bold">Rs.{{ "{:,.0f}".format(alert.target_price) }}</span>
+                                </td>
+                                <td>
+                                    {% set prices = [alert.product.amazon_price, alert.product.flipkart_price,
+                                    alert.product.reliance_price, alert.product.croma_price,
+                                    alert.product.vijaysales_price] | select('number') | list %}
+                                    <span class="text-gradient fw-bold">
+                                        {% if prices %}Rs.{{ "{:,.0f}".format(prices|min) }}{% else %}N/A{% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if prices and prices|min <= alert.target_price %} <span
+                                        class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
+                                        <i class="fas fa-bell me-1"></i>Price Met!</span>
+                                        {% else %}
+                                        <span
+                                            class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1"><i
+                                                class="fas fa-spinner me-1"></i>Tracking</span>
+                                        {% endif %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-secondary">No configured price drop alerts
+                                    setup.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

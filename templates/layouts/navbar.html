@@ -1,0 +1,98 @@
+<nav class="navbar navbar-expand-lg navbar-custom navbar-light fixed-top">
+    <div class="container">
+        <!-- Logo -->
+        <a class="navbar-brand d-flex align-items-center" href="{{ url_for('pages.index') }}">
+            <div class="p-1 px-2 rounded-2 text-white bg-gradient-primary me-2 d-inline-block"
+                style="background: var(--primary-gradient);">
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            <span class="fw-bold tracking-wide"
+                style="font-family: var(--font-heading); color: var(--text-primary);">ShopSmart <span
+                    class="text-gradient">AI</span></span>
+        </a>
+
+        <!-- Toggle Button for Mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <li class="nav-item">
+                    <a class="nav-link fw-medium" href="{{ url_for('pages.index') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-medium"
+                        href="{{ url_for('pages.search', category='Mobiles') }}">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-medium" href="{{ url_for('pages.compare') }}">Compare</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-medium" href="{{ url_for('pages.search') }}">Deals</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-medium text-gradient" href="{{ url_for('pages.recommendations') }}">
+                        <i class="fas fa-magic me-1"></i>AI Recs
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Right Options -->
+            <div class="d-flex align-items-center gap-3">
+                <!-- Theme Toggle -->
+                <button type="button" class="btn btn-link nav-link p-2" id="theme-toggle-btn" aria-label="Toggle Theme">
+                    <i class="fas fa-moon text-primary"></i>
+                </button>
+
+                {% if current_user.is_authenticated %}
+                <!-- User is Logged In -->
+                <a href="{{ url_for('pages.notifications') }}"
+                    class="position-relative text-decoration-none text-secondary">
+                    <i class="far fa-bell fs-5"></i>
+                    <span
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light"
+                        style="font-size: 0.6rem; padding: 3px 6px;">
+                        3
+                    </span>
+                </a>
+
+                <a href="{{ url_for('pages.wishlist') }}" class="text-secondary text-decoration-none" title="Wishlist">
+                    <i class="far fa-heart fs-5"></i>
+                </a>
+
+                <!-- User Dropdown Menu -->
+                <div class="dropdown">
+                    <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" role="button"
+                        id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ current_user.avatar_url or 'https://api.dicebear.com/7.x/adventurer/svg?seed=Guest' }}"
+                            alt="Profile" class="rounded-circle border" width="36" height="36">
+                        <span class="ms-2 d-none d-sm-inline fw-semibold text-secondary" style="font-size: 0.9rem;">{{
+                            current_user.username }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end border shadow-sm glass-panel"
+                        aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item fw-medium" href="{{ url_for('pages.dashboard') }}"><i
+                                    class="fas fa-chart-line me-2 text-primary"></i>Dashboard</a></li>
+                        <li><a class="dropdown-item fw-medium" href="{{ url_for('pages.profile') }}"><i
+                                    class="fas fa-user-edit me-2 text-primary"></i>Profile</a></li>
+                        <li><a class="dropdown-item fw-medium" href="{{ url_for('pages.settings') }}"><i
+                                    class="fas fa-cog me-2 text-primary"></i>Settings</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger fw-semibold" href="{{ url_for('auth.logout') }}"><i
+                                    class="fas fa-sign-out-alt me-2"></i>Sign Out</a></li>
+                    </ul>
+                </div>
+                {% else %}
+                <!-- User is Guest -->
+                <a href="{{ url_for('auth.login') }}" class="btn btn-link nav-link fw-semibold">Sign In</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-gradient-primary">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

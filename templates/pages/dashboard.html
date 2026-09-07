@@ -1,0 +1,165 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}User Dashboard - ShopSmart AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-3 mb-4">
+            <div class="dashboard-sidebar p-3 py-4 animate-on-scroll" data-animation="fade-in">
+                <!-- User Profile Intro -->
+                <div class="text-center pb-4 mb-4 border-bottom">
+                    <img src="{{ current_user.avatar_url or 'https://api.dicebear.com/7.x/adventurer/svg?seed=Guest' }}"
+                        alt="Profile Avatar" class="rounded-circle border mb-3" width="80" height="80">
+                    <h5 class="fw-bold text-dark mb-1">{{ current_user.username }}</h5>
+                    <p class="text-secondarySmall text-secondary mb-0">{{ current_user.email }}</p>
+                </div>
+
+                <!-- Navigation links list -->
+                <ul class="nav flex-column gap-2">
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.dashboard') }}"
+                            class="nav-link active rounded-pill px-3 py-2 text-decoration-none d-flex align-items-center">
+                            <i class="fas fa-chart-pie me-2 text-primary"></i> <strong class="text-primary">Overview
+                                Overview</strong>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.wishlist') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="far fa-heart me-2 text-secondary"></i> My Wishlist
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.notifications') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="far fa-bell me-2 text-secondary"></i> Alerts History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.profile') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="far fa-user me-2 text-secondary"></i> Account Details
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.settings') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="fas fa-sliders-h me-2 text-secondary"></i> preferences
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Dashboard Central Panel -->
+        <div class="col-lg-9">
+            <!-- Stat metrics row -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4 animate-on-scroll" data-animation="slide-up">
+                    <div class="glass-card p-4 d-flex align-items-center gap-3">
+                        <div class="p-3 rounded-4 bg-primary bg-opacity-10 text-primary"><i
+                                class="far fa-heart fa-2x"></i></div>
+                        <div>
+                            <h3 class="fw-bold mb-0 text-dark">{{ wishlist_count }}</h3>
+                            <p class="text-secondarySmall text-secondary mb-0">Wishlist Items</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 animate-on-scroll" data-animation="slide-up" style="animation-delay:0.1s;">
+                    <div class="glass-card p-4 d-flex align-items-center gap-3">
+                        <div class="p-3 rounded-4 bg-secondary bg-opacity-10 text-secondary"><i
+                                class="far fa-bell fa-2x"></i></div>
+                        <div>
+                            <h3 class="fw-bold mb-0 text-dark">{{ alert_count }}</h3>
+                            <p class="text-secondarySmall text-secondary mb-0">Active Alerts</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 animate-on-scroll" data-animation="slide-up" style="animation-delay:0.2s;">
+                    <div class="glass-card p-4 d-flex align-items-center gap-3">
+                        <div class="p-3 rounded-4 bg-accent bg-opacity-10 text-accent"><i
+                                class="fas fa-search fa-2x"></i></div>
+                        <div>
+                            <h3 class="fw-bold mb-0 text-dark">{{ search_count }}</h3>
+                            <p class="text-secondarySmall text-secondary mb-0">Searches Logged</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Canvas Grid -->
+            <div class="row g-4 mb-4">
+                <!-- Search trends chart container -->
+                <div class="col-md-7 animate-on-scroll" data-animation="slide-up">
+                    <div class="card glass-card border-0 p-4" style="height: 320px;">
+                        <h6 class="fw-bold text-dark mb-4"><i class="fas fa-history me-2 text-primary"></i>My Search
+                            Activity Activity</h6>
+                        <div class="position-relative" style="height:210px;">
+                            <canvas id="searchTrendsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category chart container -->
+                <div class="col-md-5 animate-on-scroll" data-animation="slide-up" style="animation-delay:0.1s;">
+                    <div class="card glass-card border-0 p-4" style="height: 320px;">
+                        <h6 class="fw-bold text-dark mb-4"><i class="fas fa-chart-pie me-2 text-secondary"></i>Category
+                            Interest Distribution</h6>
+                        <div class="position-relative" style="height:210px;">
+                            <canvas id="categoriesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search log history -->
+            <div class="card glass-card border-0 p-4 animate-on-scroll" data-animation="slide-up">
+                <h6 class="fw-bold text-dark mb-3"><i class="fas fa-history text-accent me-2"></i>Recent searches
+                    history</h6>
+                <div class="table-responsive">
+                    <table class="table table-borderless align-middle mb-0 text-dark" style="font-size:0.9rem;">
+                        <thead>
+                            <tr class="text-secondary border-bottom">
+                                <th>Search Term</th>
+                                <th>Category Filter</th>
+                                <th>Timestamp</th>
+                                <th class="text-end">Lookup Link</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for query in search_queries %}
+                            <tr class="border-bottom">
+                                <td><span class="fw-semibold">{{ query.query_text }}</span></td>
+                                <td><span class="badge bg-secondary-subtle text-secondary py-1">{{ query.category_filter
+                                        or 'All' }}</span></td>
+                                <td><span class="text-secondary">{{ query.timestamp.strftime('%d %b %Y, %H:%M')
+                                        }}</span></td>
+                                <td class="text-end"><a
+                                        href="{{ url_for('pages.search', q=query.query_text, category=query.category_filter) }}"
+                                        class="text-primary text-decoration-none" title="Search again"><i
+                                            class="fas fa-search"></i></a></td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-secondary">No recorded search queries
+                                    history yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

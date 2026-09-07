@@ -1,0 +1,140 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Product Compare Matrix - ShopSmart AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/compare.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-4 animate-on-scroll"
+        data-animation="fade-in">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">Comparison Matrix</h2>
+            <p class="text-secondary mb-0">Analyzing differences in specifications and store deals.</p>
+        </div>
+        <a href="{{ url_for('pages.search') }}" class="btn btn-outline-custom">Add More Products</a>
+    </div>
+
+    {% if products|length > 0 %}
+    <!-- Main comparison grid -->
+    <div class="glass-card p-4 border-0 mb-5 animate-on-scroll" data-animation="slide-up">
+        <div class="table-responsive">
+            <table class="table align-middle text-center compare-matrix-table mb-0">
+                <thead>
+                    <tr>
+                        <!-- First cell: Empty corner label -->
+                        <th class="border-0 bg-transparent text-start" style="min-width: 180px;">
+                            <span class="text-secondarySmall text-secondary" style="font-size:0.8rem;">Feature
+                                Matrices</span>
+                        </th>
+
+                        <!-- Columns for products -->
+                        {% for p in products %}
+                        <th class="border-0 bg-transparent" style="min-width: 200px;">
+                            <div class="px-2 pb-3 position-relative">
+                                <!-- Remove Button -->
+                                <button type="button"
+                                    class="btn btn-sm btn-light border position-absolute top-0 end-0 rounded-circle remove-compare-btn"
+                                    data-product-id="{{ p.id }}"
+                                    style="z-index: 2; width: 28px; height: 28px; padding: 2px;" title="Remove">
+                                    <i class="fas fa-times text-danger"></i>
+                                </button>
+
+                                <div class="mx-auto mb-2" style="width: 100px; height: 100px;">
+                                    <img src="{{ p.image_url }}" alt="{{ p.name }}"
+                                        style="max-width:100%; max-height:100%; object-fit: contain;">
+                                </div>
+                                <h6 class="fw-bold text-dark mb-1"
+                                    style="font-size:0.85rem; height: 38px; overflow: hidden; display: -webkit-box; line-clamp: 2; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                                    {{ p.name }}
+                                </h6>
+                                <span class="badge bg-secondary-subtle text-secondary py-1" style="font-size:0.7rem;">{{
+                                    p.brand }}</span>
+                            </div>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Row: Brand -->
+                    <tr class="compare-row-specs border-bottom" data-spec-name="Brand">
+                        <td class="text-start fw-semibold text-secondary" style="font-size: 0.9rem;">Brand</td>
+                        {% for p in products %}
+                        <td class="compare-cell-val text-dark fw-medium" style="font-size: 0.9rem;">{{ p.brand }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Row: Best Deal Starting Price -->
+                    <tr class="compare-row-specs border-bottom" data-spec-name="Price">
+                        <td class="text-start fw-semibold text-secondary" style="font-size: 0.9rem;">Starting Price</td>
+                        {% for p in products %}
+                        {% set prices = [p.amazon_price, p.flipkart_price, p.reliance_price, p.croma_price,
+                        p.vijaysales_price] | select('number') | list %}
+                        <td class="compare-cell-val text-dark fw-bold" style="font-size: 1rem;">
+                            {% if prices %}
+                            Rs.{{ "{:,.2f}".format(prices|min) }}
+                            {% else %}
+                            Out of stock
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+
+                    <!-- Specs details loop -->
+                    {% for spec_key in spec_keys %}
+                    <tr class="compare-row-specs border-bottom" data-spec-name="{{ spec_key }}">
+                        <td class="text-start fw-semibold text-secondary" style="font-size: 0.9rem;">{{ spec_key }}</td>
+                        {% for p in products %}
+                        <td class="compare-cell-val text-secondarySmall text-secondary" style="font-size: 0.9rem;">
+                            {{ p.specs.get(spec_key, 'N/A') }}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+
+                    <!-- Buy Buttons -->
+                    <tr>
+                        <td class="border-0 bg-transparent"></td>
+                        {% for p in products %}
+                        <td class="border-0 bg-transparent pt-4">
+                            <a href="{{ url_for('pages.product_detail', product_key=p.product_key) }}"
+                                class="btn btn-gradient-primary btn-sm py-2 px-3 fw-bold w-100"
+                                style="border-radius: var(--radius-sm);">View Details</a>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- AI Verdict Synthesis -->
+    <div class="row animate-on-scroll" data-animation="slide-up">
+        <div class="col-12">
+            <div class="card glass-card border-0 p-4 border-start border-4 border-primary">
+                <h5 class="fw-bold text-dark mb-3"><i class="fas fa-brain text-gradient me-2"></i>Gemini Generative
+                    Verdict</h5>
+                <p class="text-dark fs-6 font-monospace mb-0 leading-relaxed" style="white-space: pre-line;">{{
+                    ai_analysis }}</p>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Empty matrix -->
+    <div class="text-center py-5 glass-card bg-body text-secondary">
+        <i class="fas fa-columns fa-4x text-light mb-4"></i>
+        <h4 class="fw-bold text-dark">Comparison List is Empty</h4>
+        <p class="text-secondarySmall text-secondary mb-4">Search/browse products and select the "Compare" check box to
+            populate columns.</p>
+        <a href="{{ url_for('pages.search') }}" class="btn btn-gradient-primary">Go to Product Catalog</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/compare.js') }}"></script>
+{% endblock %}

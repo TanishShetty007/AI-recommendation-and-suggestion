@@ -1,0 +1,58 @@
+:root {
+    /* Color Palette */
+    --primary-color: #4361ee;
+    --primary-rgb: 67, 97, 238;
+    --secondary-color: #7209b7;
+    --secondary-rgb: 114, 9, 183;
+    --accent-color: #f77f00;
+    --success-color: #06d6a0;
+    --warning-color: #ffb703;
+    
+    /* Backgrounds */
+    --bg-light: #f4f6f9;
+    --card-light: #ffffff;
+    --card-light-rgb: 255, 255, 255;
+    
+    /* Dark Mode Defaults */
+    --bg-dark: #0f172a;
+    --card-dark: #1e293b;
+    --card-dark-rgb: 30, 41, 59;
+    
+    /* Active colors - default light */
+    --body-bg: var(--bg-light);
+    --card-bg: var(--card-light);
+    --card-bg-rgb: var(--card-light-rgb);
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    
+    /* Typography */
+    --font-heading: 'Poppins', sans-serif;
+    --font-body: 'Poppins', sans-serif;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 8px 16px rgba(0,0,0,0.06);
+    --shadow-lg: 0 16px 32px rgba(0,0,0,0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+    
+    /* Borders */
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    
+    /* Gradients */
+    --primary-gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    --accent-gradient: linear-gradient(135deg, #f77f00 0%, #fcbf49 100%);
+    --card-gradient: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.3) 100%);
+}
+
+[data-theme="dark"] {
+    --body-bg: var(--bg-dark);
+    --card-bg: var(--card-dark);
+    --card-bg-rgb: var(--card-dark-rgb);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border-color: #334155;
+    --card-gradient: linear-gradient(135deg, rgba(30,41,59,0.7) 0%, rgba(30,41,59,0.3) 100%);
+}

@@ -1,0 +1,235 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Search Results - ShopSmart AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row">
+        <!-- Sidebar Filters -->
+        <div class="col-lg-3 mb-4">
+            <div class="search-sidebar animate-on-scroll" data-animation="fade-in">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0 text-dark">Filters</h5>
+                    <a href="{{ url_for('pages.search') }}" class="text-decoration-none text-primary fw-medium"
+                        style="font-size: 0.85rem;">Clear All</a>
+                </div>
+
+                <form action="{{ url_for('pages.search') }}" method="GET" id="filterForm">
+                    <!-- Sidebar specific Search Input -->
+                    <div class="filter-group form-group mb-3">
+                        <label>Search Models or Brands</label>
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control form-control-custom text-dark ps-2"
+                                placeholder="Search..." value="{{ query or '' }}">
+                        </div>
+                    </div>
+
+                    <!-- Category filter -->
+                    <div class="filter-group">
+                        <label>Category</label>
+                        <select class="form-select form-control-custom text-dark shadow-none w-100" name="category"
+                            onchange="this.form.submit()">
+                            <option value="All" {% if selected_category=='All' %}selected{% endif %}>All Categories
+                            </option>
+                            {% for cat in categories %}
+                            <option value="{{ cat }}" {% if selected_category==cat %}selected{% endif %}>{{ cat }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Price Limits -->
+                    <div class="filter-group">
+                        <label>Price Range</label>
+                        <div class="input-group mb-2">
+                            <span class="input-group-text bg-transparent text-secondary" style="font-size: 0.85rem;">Min
+                                (Rs)</span>
+                            <input type="number" class="form-control form-control-custom text-dark ps-2"
+                                name="min_price" value="{{ min_price or '' }}" placeholder="1000">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent text-secondary" style="font-size: 0.85rem;">Max
+                                (Rs)</span>
+                            <input type="number" class="form-control form-control-custom text-dark ps-2"
+                                name="max_price" value="{{ max_price or '' }}" placeholder="150000">
+                        </div>
+                    </div>
+
+                    <!-- Brand filter -->
+                    <div class="filter-group">
+                        <label>Brand</label>
+                        <select class="form-select form-control-custom text-dark shadow-none w-100" name="brand"
+                            onchange="this.form.submit()">
+                            <option value="">All Brands</option>
+                            {% for b in brands %}
+                            <option value="{{ b }}" {% if selected_brand==b %}selected{% endif %}>{{ b }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Ratings -->
+                    <div class="filter-group">
+                        <label>Minimum Rating</label>
+                        <div class="d-flex flex-column gap-1">
+                            <label class="filter-checkbox-label">
+                                <input type="radio" name="min_rating" value="4.5" {% if
+                                    request.args.get('min_rating')=='4.5' %}checked{% endif %}
+                                    onchange="this.form.submit()"> 4.5 & up <i class="fas fa-star text-warning ms-1"
+                                    style="font-size: 0.8rem;"></i>
+                            </label>
+                            <label class="filter-checkbox-label">
+                                <input type="radio" name="min_rating" value="4.0" {% if
+                                    request.args.get('min_rating')=='4.0' or not request.args.get('min_rating')
+                                    %}checked{% endif %} onchange="this.form.submit()"> 4.0 & up <i
+                                    class="fas fa-star text-warning ms-1" style="font-size: 0.8rem;"></i>
+                            </label>
+                            <label class="filter-checkbox-label">
+                                <input type="radio" name="min_rating" value="3.0" {% if
+                                    request.args.get('min_rating')=='3.0' %}checked{% endif %}
+                                    onchange="this.form.submit()"> 3.0 & up <i class="fas fa-star text-warning ms-1"
+                                    style="font-size: 0.8rem;"></i>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-gradient-primary w-100 mt-2">Apply Filters</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Product Grid Listing -->
+        <div class="col-lg-9">
+            <!-- Results bar and Sorter -->
+            <div class="d-flex justify-content-between align-items-center mb-4 bg-body p-3 rounded-3 shadow-sm animate-on-scroll"
+                data-animation="fade-in">
+                <div>
+                    <h5 class="fw-bold mb-0 text-dark">
+                        {% if query %}
+                        Results for "{{ query }}"
+                        {% else %}
+                        Catalog Listings
+                        {% endif %}
+                        <span class="text-secondary fw-normal fs-6">({{ products|length }} items)</span>
+                    </h5>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="text-secondary fw-semibold d-none d-sm-inline" style="font-size: 0.9rem;">Sort
+                        by:</span>
+                    <select class="form-select form-control-custom text-dark py-1 px-3 shadow-none border"
+                        form="filterForm" name="sort_by" onchange="document.getElementById('filterForm').submit()">
+                        <option value="relevance" {% if sort_by=='relevance' or not sort_by %}selected{% endif %}>
+                            Relevance</option>
+                        <option value="price_low" {% if sort_by=='price_low' %}selected{% endif %}>Price: Low to High
+                        </option>
+                        <option value="price_high" {% if sort_by=='price_high' %}selected{% endif %}>Price: High to Low
+                        </option>
+                        <option value="rating" {% if sort_by=='rating' %}selected{% endif %}>Rating</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products list grid -->
+            <div class="row g-3">
+                {% for p in products %}
+                <div class="col-md-4 col-sm-6 animate-on-scroll" data-animation="slide-up">
+                    <div class="card glass-card h-100 border-0 p-3 position-relative">
+                        <!-- Add to Wishlist Toggle -->
+                        <button type="button" class="wishlist-toggle-icon border-0 wishlist-toggle-btn"
+                            data-product-id="{{ p.id }}" aria-label="Add to Wishlist">
+                            <i class="far fa-heart"></i>
+                        </button>
+
+                        <!-- Product IMG wrapper -->
+                        <div class="product-card-img-wrap mb-3">
+                            <img src="{{ p.image_url }}" alt="{{ p.name }}">
+                        </div>
+
+                        <!-- Brand & Rating -->
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-secondarySmall text-secondary"
+                                style="font-size: 0.8rem; font-weight: 500;">{{ p.brand }}</span>
+                            <div class="d-flex align-items-center gap-1 text-warning" style="font-size: 0.8rem;">
+                                <i class="fas fa-star"></i>
+                                <span class="fw-semibold text-secondarySmall text-secondary ms-1">{{ p.rating }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Product Title -->
+                        <h6 class="card-title fw-bold text-dark mb-2"
+                            style="font-size: 0.95rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 42px;">
+                            {{ p.name }}
+                        </h6>
+
+                        <!-- Platform price tags -->
+                        <div class="mb-4">
+                            {% set prices = [p.amazon_price, p.flipkart_price, p.reliance_price, p.croma_price,
+                            p.vijaysales_price] | select('number') | list %}
+                            {% if prices %}
+                            <div class="d-flex justify-content-between align-items-end mb-1">
+                                <span class="text-secondary" style="font-size: 0.8rem;">Best Deal</span>
+                                <span class="fw-bold text-gradient fs-5">Rs.{{ "{:,.2f}".format(prices|min) }}</span>
+                            </div>
+                            <span class="text-secondarySmall text-secondary" style="font-size: 0.75rem;">
+                                Compared across 5 platforms
+                            </span>
+                            {% else %}
+                            <span class="text-muted">Out of stock</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Footer buttons -->
+                        <div class="d-flex justify-content-between align-items-center mt-auto gap-2">
+                            <label class="compare-checkbox-label">
+                                <input type="checkbox" class="compare-checkbox me-1" data-product-id="{{ p.id }}">
+                                Compare
+                            </label>
+                            <a href="{{ url_for('pages.product_detail', product_key=p.product_key) }}"
+                                class="btn btn-gradient-primary btn-sm py-2 px-3 fw-bold">View Product</a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-12 text-center py-5">
+                    <i class="far fa-sad-tear text-secondary fa-4x mb-3"></i>
+                    <h4 class="fw-bold text-dark">No Products Found</h4>
+                    <p class="text-secondary text-secondarySmall">Try tweaking your search term, filters, or sorting
+                        thresholds.</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if products|length > 0 %}
+            <nav class="mt-5" aria-label="Products pagination">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled"><span class="page-link glass-panel">Previous</span></li>
+                    <li class="page-item active"><span class="page-link bg-gradient-primary border-0"
+                            style="background: var(--primary-gradient);">1</span></li>
+                    <li class="page-item disabled"><span class="page-link glass-panel">Next</span></li>
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Floating Compare Sticky Drawer -->
+<div id="floating-compare-btn" class="position-fixed bottom-0 start-50 translate-middle-x p-3 mb-3 z-3 d-none">
+    <div class="glass-panel p-3 px-4 rounded-pill shadow-lg d-flex align-items-center gap-3 border border-primary">
+        <span class="text-dark fw-bold" style="font-size: 0.95rem;">
+            <i class="fas fa-columns text-primary me-2"></i>Compare: <span class="badge bg-primary">0</span> Products
+        </span>
+        <a href="/compare" class="btn btn-gradient-primary btn-sm rounded-pill px-4">Compare Now</a>
+        <button type="button" class="btn btn-link text-danger p-0 border-0 text-decoration-none fw-semibold"
+            onclick="clearComparison()" style="font-size: 0.85rem;">Clear</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+{% endblock %}

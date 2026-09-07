@@ -1,0 +1,98 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Register - ShopSmart AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="row g-0 min-vh-100 align-items-stretch" style="margin-top: -56px;">
+        <!-- Left Side: Graphic / Illustration -->
+        <div class="col-lg-6 d-none d-lg-flex bg-gradient-primary flex-column justify-content-center align-items-center text-white p-5 position-relative overflow-hidden"
+            style="background: var(--primary-gradient);">
+            <!-- Floating Blobs Background -->
+            <div class="position-absolute rounded-circle bg-white opacity-10 float-icon"
+                style="width: 300px; height: 300px; top: -50px; left: -50px;"></div>
+            <div class="position-absolute rounded-circle bg-white opacity-10 float-icon"
+                style="width: 400px; height: 400px; bottom: -100px; right: -100px; animation-delay: 2s;"></div>
+
+            <div class="text-center z-1 animate-on-scroll" data-animation="slide-up">
+                <i class="fas fa-user-plus fa-5x mb-4 text-white float-icon"></i>
+                <h1 class="fw-bold mb-3 display-4">Start Saving Now</h1>
+                <p class="fs-5 max-width-500 opacity-75">Create an account to monitor price movements, set custom alarm
+                    thresholds, and discover personalized buying paths via AI.</p>
+            </div>
+        </div>
+
+        <!-- Right Side: Form -->
+        <div class="col-lg-6 d-flex flex-column justify-content-center p-5 bg-body">
+            <div class="mx-auto" style="width: 100%; max-width: 420px;">
+                <div class="mb-4 animate-on-scroll" data-animation="fade-in">
+                    <h2 class="fw-bold text-dark">Create Account</h2>
+                    <p class="text-secondary">Sign up in seconds to start building your wishlist alerts.</p>
+                </div>
+
+                <form action="{{ url_for('auth.register') }}" method="POST" class="animate-on-scroll"
+                    data-animation="slide-up">
+                    <div class="mb-3">
+                        <label for="username" class="form-label fw-medium text-secondary">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-secondary"><i
+                                    class="far fa-user"></i></span>
+                            <input type="text" class="form-control form-control-custom border-start-0" id="username"
+                                name="username" placeholder="johndoe" required style="border-radius: 0 8px 8px 0;">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-medium text-secondary">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-secondary"><i
+                                    class="far fa-envelope"></i></span>
+                            <input type="email" class="form-control form-control-custom border-start-0" id="email"
+                                name="email" placeholder="name@example.com" required
+                                style="border-radius: 0 8px 8px 0;">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label fw-medium text-secondary">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-secondary"><i
+                                    class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control form-control-custom border-start-0" id="password"
+                                name="password" placeholder="••••••••" required style="border-radius: 0 8px 8px 0;">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="confirm_password" class="form-label fw-medium text-secondary">Confirm
+                            Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-secondary"><i
+                                    class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control form-control-custom border-start-0"
+                                id="confirm_password" name="confirm_password" placeholder="••••••••" required
+                                style="border-radius: 0 8px 8px 0;">
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="terms" required style="cursor: pointer;">
+                        <label class="form-check-label text-secondary" for="terms"
+                            style="cursor: pointer; font-size: 0.9rem;">
+                            I agree to the <a href="#" class="text-decoration-none text-primary">Terms of Service</a> &
+                            <a href="#" class="text-decoration-none text-primary">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-gradient-primary w-100 py-3 mb-4">Sign Up</button>
+
+                    <p class="text-center text-secondary mb-0" style="font-size: 0.9rem;">
+                        Already have an account? <a href="{{ url_for('auth.login') }}"
+                            class="text-decoration-none text-primary fw-semibold">Sign In here</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

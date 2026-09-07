@@ -1,0 +1,45 @@
+@media (max-width: 991.98px) {
+    .section-padding {
+        padding: 50px 0;
+    }
+
+    .heading-title {
+        font-size: 2rem;
+    }
+
+    .navbar-custom {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    .navbar-collapse {
+        background: rgba(var(--card-bg-rgb), 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: var(--radius-md);
+        padding: 20px;
+        margin-top: 10px;
+        border: 1px solid var(--border-color);
+    }
+
+    .glass-card {
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .heading-title {
+        font-size: 1.75rem;
+    }
+
+    .btn-gradient-primary,
+    .btn-gradient-accent {
+        width: 100%;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+}

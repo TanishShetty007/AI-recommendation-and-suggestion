@@ -1,0 +1,171 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}AI Product Recommendations - ShopSmart AI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center animate-on-scroll mb-5" data-animation="fade-in">
+            <span class="badge bg-custom-ai mb-3"><i class="fas fa-magic me-1"></i>Gemini AI Engine</span>
+            <h2 class="fw-bold text-dark">Personalized Product Assistant</h2>
+            <p class="text-secondary max-width-600 mx-auto">Fill this simple questionnaire about your preferences and
+                target tasks, and let AI generate your optimal shopping pathway.</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-8 animate-on-scroll" data-animation="slide-up">
+            <!-- Questionnaire card form -->
+            <div class="card glass-card border-0 p-4 p-md-5 mb-5">
+                <form action="{{ url_for('pages.recommendations') }}" method="POST">
+                    <!-- Q1: Category Selection -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark mb-3">1. What category are you searching for?</label>
+                        <div class="row g-3">
+                            <div class="col-md-6 col-12">
+                                <label
+                                    class="btn-check-label w-100 text-start border p-3 rounded-3 d-block position-relative"
+                                    style="cursor:pointer;">
+                                    <input type="radio" name="category" value="Mobiles" {% if category=='Mobiles'
+                                        %}checked{% endif %} class="form-check-input me-2">
+                                    <strong class="text-dark">Mobiles</strong>
+                                    <span class="d-block text-secondary" style="font-size: 0.8rem;">Smartphones,
+                                        flagships, and budget selections</span>
+                                </label>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <label
+                                    class="btn-check-label w-100 text-start border p-3 rounded-3 d-block position-relative"
+                                    style="cursor:pointer;">
+                                    <input type="radio" name="category" value="Laptops" {% if category=='Laptops'
+                                        %}checked{% endif %} class="form-check-input me-2">
+                                    <strong class="text-dark">Laptops</strong>
+                                    <span class="d-block text-secondary" style="font-size: 0.8rem;">Ultrabooks,
+                                        programming rigs, and gaming hardware</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q2: Primary Need / Usage -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark mb-3">2. What is your primary use case/need?</label>
+                        <div class="row g-2">
+                            <div class="col-md-4 col-12">
+                                <label class="btn-check-label w-100 border p-3 rounded-3 d-block text-center"
+                                    style="cursor:pointer;">
+                                    <input type="radio" name="usage" value="Gaming" {% if usage=='Gaming' %}checked{%
+                                        endif %} class="form-check-input mb-2 mt-0 d-block mx-auto">
+                                    <strong class="text-dark">Gaming</strong>
+                                </label>
+                            </div>
+                            <div class="col-md-4 col-12">
+                                <label class="btn-check-label w-100 border p-3 rounded-3 d-block text-center"
+                                    style="cursor:pointer;">
+                                    <input type="radio" name="usage" value="Photography" {% if usage=='Photography'
+                                        %}checked{% endif %} class="form-check-input mb-2 mt-0 d-block mx-auto">
+                                    <strong class="text-dark">Photography</strong>
+                                </label>
+                            </div>
+                            <div class="col-md-4 col-12">
+                                <label class="btn-check-label w-100 border p-3 rounded-3 d-block text-center"
+                                    style="cursor:pointer;">
+                                    <input type="radio" name="usage" value="Student" {% if usage=='Student' %}checked{%
+                                        endif %} class="form-check-input mb-2 mt-0 d-block mx-auto">
+                                    <strong class="text-dark">Student / Daily</strong>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q3: Price Budget -->
+                    <div class="mb-4">
+                        <label for="rec_budget" class="form-label fw-bold text-dark mb-2">3. What is your maximum budget
+                            threshold (Rs.)?</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent text-secondary"><i
+                                    class="fas fa-wallet"></i></span>
+                            <input type="number" class="form-control form-control-custom text-dark ps-2" id="rec_budget"
+                                name="budget" placeholder="80000" min="5000" max="300000" value="{{ budget }}" required>
+                        </div>
+                    </div>
+
+                    <!-- Q4: Battery Preference -->
+                    <div class="mb-5">
+                        <label class="form-label fw-bold text-dark mb-3">4. Battery life importance?</label>
+                        <div class="d-flex gap-3">
+                            <label class="btn-check-label border p-3 rounded-3 d-block text-center flex-fill"
+                                style="cursor:pointer;">
+                                <input type="radio" name="battery" value="High" {% if battery=='High' %}checked{% endif
+                                    %} class="form-check-input mb-1 d-block mx-auto">
+                                <strong class="text-dark">High</strong>
+                            </label>
+                            <label class="btn-check-label border p-3 rounded-3 d-block text-center flex-fill"
+                                style="cursor:pointer;">
+                                <input type="radio" name="battery" value="Medium" {% if battery=='Medium' %}checked{%
+                                    endif %} class="form-check-input mb-1 d-block mx-auto">
+                                <strong class="text-dark">Medium</strong>
+                            </label>
+                            <label class="btn-check-label border p-3 rounded-3 d-block text-center flex-fill"
+                                style="cursor:pointer;">
+                                <input type="radio" name="battery" value="Low" {% if battery=='Low' %}checked{% endif %}
+                                    class="form-check-input mb-1 d-block mx-auto">
+                                <strong class="text-dark">Low</strong>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Send button -->
+                    <button type="submit" class="btn btn-gradient-primary w-100 py-3 fw-bold"><i
+                            class="fas fa-brain me-2"></i>Generate AI Recommendations</button>
+                </form>
+            </div>
+
+            {% if show_results %}
+            <!-- AI Advice Block -->
+            {% if ai_advice %}
+            <div class="card glass-card border-0 p-4 border-start border-4 border-success animate-on-scroll mb-4"
+                data-animation="slide-up">
+                <h5 class="fw-bold text-success mb-3"><i class="fas fa-lightbulb me-2"></i>AI Shopping Advice</h5>
+                <p class="text-dark fs-6 mb-0 leading-relaxed" style="white-space: pre-line;">{{ ai_advice }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Product Cards -->
+            {% if products|length > 0 %}
+            <h5 class="fw-bold text-dark mb-3">Matched Products ({{ products|length }})</h5>
+            <div class="row g-4 mb-5">
+                {% for p in products %}
+                <div class="col-md-6 animate-on-scroll" data-animation="slide-up">
+                    <div class="card glass-card h-100 border-0 p-3">
+                        <div class="d-flex gap-3 mb-3">
+                            <img src="{{ p.image_url }}" alt="{{ p.name }}"
+                                style="width: 80px; height: 80px; object-fit: contain;">
+                            <div>
+                                <span class="badge bg-primary mb-1">AI Score: {{ p.ai_score }}%</span>
+                                <h6 class="fw-bold text-dark mb-1" style="font-size: 0.9rem;">{{ p.name }}</h6>
+                                <span class="text-secondary" style="font-size: 0.8rem;">{{ p.brand }} · {{ p.category
+                                    }}</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-gradient fs-5">Rs.{{ "{:,.2f}".format(p.min_price) }}</span>
+                            <a href="{{ url_for('pages.product_detail', product_key=p.product_key) }}"
+                                class="btn btn-outline-custom btn-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-4 glass-card mb-5">
+                <i class="fas fa-search fa-3x text-light mb-3"></i>
+                <h5 class="fw-bold text-dark">No Products Match Your Criteria</h5>
+                <p class="text-secondary">Try increasing your budget or changing the category.</p>
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

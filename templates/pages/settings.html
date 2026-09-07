@@ -1,0 +1,110 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}User Settings - ShopSmart AI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-3 mb-4">
+            <div class="dashboard-sidebar p-3 py-4 animate-on-scroll" data-animation="fade-in">
+                <div class="text-center pb-4 mb-4 border-bottom">
+                    <img src="{{ current_user.avatar_url or 'https://api.dicebear.com/7.x/adventurer/svg?seed=Guest' }}"
+                        alt="Profile Avatar" class="rounded-circle border mb-3" width="80" height="80">
+                    <h5 class="fw-bold text-dark mb-1">{{ current_user.username }}</h5>
+                    <p class="text-secondarySmall text-secondary mb-0">{{ current_user.email }}</p>
+                </div>
+
+                <ul class="nav flex-column gap-2">
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.dashboard') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="fas fa-chart-pie me-2 text-secondary"></i> Overview Overview
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.wishlist') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="far fa-heart me-2 text-secondary"></i> My Wishlist
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.notifications') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="far fa-bell me-2 text-secondary"></i> Alerts History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.profile') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="far fa-user me-2 text-secondary"></i> Account Details
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.settings') }}"
+                            class="nav-link active rounded-pill px-3 py-2 text-decoration-none d-flex align-items-center">
+                            <i class="fas fa-sliders-h me-2 text-primary"></i> <strong
+                                class="text-primary">preferences</strong>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Preferences panel input -->
+        <div class="col-lg-9">
+            <div class="card glass-card border-0 p-4 animate-on-scroll" data-animation="slide-up">
+                <h5 class="fw-bold text-dark mb-4"><i class="fas fa-sliders-h text-primary me-2"></i>My Shopping
+                    Preferences</h5>
+
+                <form action="{{ url_for('pages.settings') }}" method="POST">
+                    <div class="mb-4">
+                        <label class="form-label text-secondary fw-semibold mb-2">Preferred Categories Interest</label>
+                        <div class="d-flex flex-wrap gap-3">
+                            <label class="compare-checkbox-label text-dark">
+                                <input type="checkbox" name="categories" value="Mobiles" {% if 'Mobiles' in
+                                    (current_user.preferred_categories or '' ).split(',') %}checked{% endif %}
+                                    class="me-1"> Mobiles
+                            </label>
+                            <label class="compare-checkbox-label text-dark">
+                                <input type="checkbox" name="categories" value="Laptops" {% if 'Laptops' in
+                                    (current_user.preferred_categories or '' ).split(',') %}checked{% endif %}
+                                    class="me-1"> Laptops
+                            </label>
+                            <label class="compare-checkbox-label text-dark">
+                                <input type="checkbox" name="categories" value="Electronics" {% if 'Electronics' in
+                                    (current_user.preferred_categories or '' ).split(',') %}checked{% endif %}
+                                    class="me-1"> Electronics
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="budget_max" class="form-label text-secondary fw-semibold">Shopping Target
+                            Budget Threshold (Rs)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent text-secondary"><i
+                                    class="fas fa-wallet"></i></span>
+                            <input type="number" class="form-control form-control-custom text-dark ps-2"
+                                name="budget_max" id="budget_max" value="{{ current_user.budget_max or '' }}"
+                                placeholder="80000">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-secondary fw-semibold mb-2">Email Notifications Setup</label>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="emailAlerts" checked
+                                style="cursor: pointer;">
+                            <label class="form-check-label text-dark" for="emailAlerts" style="cursor: pointer;">Send
+                                email immediately on price drops</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-gradient-primary">Save Preferences</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

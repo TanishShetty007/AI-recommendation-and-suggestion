@@ -1,0 +1,266 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{{ product.name }} - ShopSmart AI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4 animate-on-scroll" data-animation="fade-in">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('pages.index') }}" class="text-decoration-none">Home</a>
+            </li>
+            <li class="breadcrumb-item"><a href="{{ url_for('pages.search', category=product.category) }}"
+                    class="text-decoration-none">{{ product.category }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.brand }}</li>
+        </ol>
+    </nav>
+
+    <!-- Product Layout Grid -->
+    <div class="row g-5">
+        <!-- Left Column: Gallery & Bookmarks -->
+        <div class="col-lg-5 animate-on-scroll" data-animation="fade-in">
+            <div class="glass-panel p-4 rounded-4 text-center bg-white mb-4 position-relative shadow-sm">
+                <!-- Big Badge -->
+                <span class="position-absolute top-0 start-0 m-3 badge bg-gradient-primary"
+                    style="background: var(--primary-gradient);">Top Rated</span>
+
+                <!-- Wishlist heart button -->
+                <button type="button"
+                    class="wishlist-toggle-icon border-0 wishlist-toggle-btn {% if in_wishlist %}active{% endif %}"
+                    data-product-id="{{ product.id }}" aria-label="Add to Wishlist" style="top: 15px; right: 15px;">
+                    <i class="{% if in_wishlist %}fas fa-heart text-danger{% else %}far fa-heart{% endif %}"></i>
+                </button>
+
+                <div class="d-flex align-items-center justify-content-center" style="height: 380px;">
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}" class="img-fluid"
+                        style="max-height: 100%; object-fit: contain;">
+                </div>
+            </div>
+
+            <!-- Share and Quick Links -->
+            <div class="d-flex justify-content-between align-items-center px-2">
+                <label class="compare-checkbox-label fs-6 fw-semibold text-secondary">
+                    <input type="checkbox" class="compare-checkbox me-2" data-product-id="{{ product.id }}"> Toggle
+                    comparison grid
+                </label>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary btn-sm rounded-circle" style="width:36px; height:36px;"
+                        title="Share"><i class="fas fa-share-alt"></i></button>
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('pages.wishlist') }}" class="btn btn-outline-secondary btn-sm rounded-circle"
+                        style="width:36px; height:36px;" title="Wishlist"><i class="fas fa-heart"></i></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Details & Pricing Table -->
+        <div class="col-lg-7 animate-on-scroll" data-animation="slide-up">
+            <div class="mb-4">
+                <span class="badge bg-secondary mb-2" style="font-size:0.8rem;">{{ product.category }}</span>
+                <h1 class="fw-bold text-dark mb-2">{{ product.name }}</h1>
+
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <div class="text-warning">
+                        <i class="fas fa-star"></i>
+                        <span class="fw-bold text-dark ms-1">{{ product.rating }}</span>
+                    </div>
+                    <span class="text-secondarySmall text-secondary">({{ product.review_count }} reviews
+                        compiled)</span>
+                </div>
+
+                <p class="text-secondary fs-6 leading-relaxed">{{ product.description }}</p>
+            </div>
+
+            <!-- Platform price matrix table -->
+            <div class="card glass-card border-0 p-4 mb-4">
+                <h5 class="fw-bold text-dark mb-3"><i class="fas fa-store-alt text-primary me-2"></i>Available Deals &
+                    Platforms</h5>
+                <div class="table-responsive">
+                    <table class="table align-middle table-borderless">
+                        <thead>
+                            <tr class="text-secondarySmall text-secondary border-bottom">
+                                <th>Platform</th>
+                                <th>Listing Price</th>
+                                <th>Delivery Duration</th>
+                                <th class="text-end">Deal URL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Amazon -->
+                            {% if product.amazon_price %}
+                            <tr class="border-bottom">
+                                <td><span class="fw-bold"><i class="fab fa-amazon text-warning me-2"></i>Amazon</span>
+                                </td>
+                                <td><span class="fw-bold text-dark">Rs.{{ "{:,.2f}".format(product.amazon_price)
+                                        }}</span></td>
+                                <td><span class="text-secondary" style="font-size: 0.85rem;">2-3 Days Delivery</span>
+                                </td>
+                                <td class="text-end"><a href="https://amazon.in" target="_blank"
+                                        class="btn btn-gradient-primary btn-sm py-1 px-3">View Deal</a></td>
+                            </tr>
+                            {% endif %}
+                            <!-- Flipkart -->
+                            {% if product.flipkart_price %}
+                            <tr class="border-bottom">
+                                <td><span class="fw-bold text-blue" style="color: #0077b6;"><i
+                                            class="fas fa-shopping-basket me-2"></i>Flipkart</span></td>
+                                <td><span class="fw-bold text-dark">Rs.{{ "{:,.2f}".format(product.flipkart_price)
+                                        }}</span></td>
+                                <td><span class="text-secondary" style="font-size: 0.85rem;">Free Shipping (1-2
+                                        Days)</span></td>
+                                <td class="text-end"><a href="https://flipkart.com" target="_blank"
+                                        class="btn btn-gradient-primary btn-sm py-1 px-3">View Deal</a></td>
+                            </tr>
+                            {% endif %}
+                            <!-- Croma -->
+                            {% if product.croma_price %}
+                            <tr class="border-bottom">
+                                <td><span class="fw-bold"><i class="fas fa-plug text-accent me-2"></i>Croma</span></td>
+                                <td><span class="fw-bold text-dark">Rs.{{ "{:,.2f}".format(product.croma_price)
+                                        }}</span></td>
+                                <td><span class="text-secondary" style="font-size: 0.85rem;">Same Day Store
+                                        Pickup</span></td>
+                                <td class="text-end"><a href="https://croma.com" target="_blank"
+                                        class="btn btn-gradient-primary btn-sm py-1 px-3">View Deal</a></td>
+                            </tr>
+                            {% endif %}
+                            <!-- Reliance Digital -->
+                            {% if product.reliance_price %}
+                            <tr class="border-bottom">
+                                <td><span class="fw-bold text-danger"><i class="fas fa-bolt me-2"></i>Reliance
+                                        Digital</span></td>
+                                <td><span class="fw-bold text-dark">Rs.{{ "{:,.2f}".format(product.reliance_price)
+                                        }}</span></td>
+                                <td><span class="text-secondary" style="font-size: 0.85rem;">3-4 Days Express</span>
+                                </td>
+                                <td class="text-end"><a href="https://reliancedigital.in" target="_blank"
+                                        class="btn btn-gradient-primary btn-sm py-1 px-3">View Deal</a></td>
+                            </tr>
+                            {% endif %}
+                            <!-- Vijay Sales -->
+                            {% if product.vijaysales_price %}
+                            <tr class="border-bottom">
+                                <td><span class="fw-bold text-secondary"><i class="fas fa-tv me-2"></i>Vijay
+                                        Sales</span></td>
+                                <td><span class="fw-bold text-dark">Rs.{{ "{:,.2f}".format(product.vijaysales_price)
+                                        }}</span></td>
+                                <td><span class="text-secondary" style="font-size: 0.85rem;">4-5 Days</span></td>
+                                <td class="text-end"><a href="https://vijaysales.com" target="_blank"
+                                        class="btn btn-gradient-primary btn-sm py-1 px-3">View Deal</a></td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Module & Price history -->
+    <hr class="my-5 border-secondary opacity-25">
+
+    <div class="row g-4">
+        <!-- AI Card: Summary / Pros / Cons -->
+        <div class="col-lg-6 animate-on-scroll" data-animation="slide-up">
+            <div class="card glass-card border-0 p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold mb-0 text-dark">
+                        <i class="fas fa-robot text-gradient me-2"></i>Gemini AI Buying Advice
+                    </h5>
+                    <span class="badge bg-custom-ai">Active Smart Hub</span>
+                </div>
+
+                <!-- Summary Paragraph -->
+                <div class="mb-4 bg-primary bg-opacity-5 p-3 rounded shadow-none text-dark"
+                    style="font-size:0.95rem; border-left:4px solid var(--primary-color);">
+                    <p class="mb-0 fw-medium">"{{ ai_summary }}"</p>
+                </div>
+
+                <!-- Pros Cons row -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-success mb-2"><i class="fas fa-check-circle me-1"></i>PROS</h6>
+                        <ul class="list-unstyled d-flex flex-column gap-2 text-secondary" style="font-size:0.9rem;">
+                            {% for pro in pros_cons.pros %}
+                            <li><i class="fas fa-circle text-success me-2"
+                                    style="font-size:0.4rem; vertical-align:middle;"></i>{{ pro }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-bold text-danger mb-2"><i class="fas fa-times-circle me-1"></i>CONS</h6>
+                        <ul class="list-unstyled d-flex flex-column gap-2 text-secondary" style="font-size:0.9rem;">
+                            {% for con in pros_cons.cons %}
+                            <li><i class="fas fa-circle text-danger me-2"
+                                    style="font-size:0.4rem; vertical-align:middle;"></i>{{ con }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Price history Chart Card -->
+        <div class="col-lg-6 animate-on-scroll" data-animation="slide-up" style="animation-delay: 0.2s;">
+            <div class="card glass-card border-0 p-4 h-100">
+                <h5 class="fw-bold text-dark mb-4"><i class="fas fa-chart-line text-secondary me-2"></i>7-Day Price
+                    History Trends</h5>
+                <div class="position-relative" style="height: 250px;">
+                    <canvas id="priceHistoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Specifications accordion -->
+    <div class="row mt-4">
+        <div class="col-12 animate-on-scroll" data-animation="slide-up">
+            <div class="card glass-card border-0 p-4">
+                <h5 class="fw-bold text-dark mb-3"><i class="fas fa-tasks text-primary me-2"></i>Technical
+                    Specifications Data</h5>
+                <div class="row g-2">
+                    {% for k, v in specs.items() %}
+                    <div class="col-md-6">
+                        <div class="d-flex justify-content-between p-3 border-bottom text-dark"
+                            style="font-size: 0.95rem;">
+                            <span class="text-secondary fw-semibold">{{ k }}</span>
+                            <span class="fw-medium text-end">{{ v }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Compare Sticky Drawer -->
+<div id="floating-compare-btn" class="position-fixed bottom-0 start-50 translate-middle-x p-3 mb-3 z-3 d-none">
+    <div class="glass-panel p-3 px-4 rounded-pill shadow-lg d-flex align-items-center gap-3 border border-primary">
+        <span class="text-dark fw-bold" style="font-size: 0.95rem;">
+            <i class="fas fa-columns text-primary me-2"></i>Compare: <span class="badge bg-primary">0</span> Products
+        </span>
+        <a href="/compare" class="btn btn-gradient-primary btn-sm rounded-pill px-4">Compare Now</a>
+        <button type="button" class="btn btn-link text-danger p-0 border-0 text-decoration-none fw-semibold"
+            onclick="clearComparison()" style="font-size: 0.85rem;">Clear</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+
+<!-- Embedded JSON data for JS consumption without syntax errors -->
+<script id="price-data" type="application/json">
+    {{ price_data | tojson | safe }}
+</script>
+<script>
+    // Initialize prices chart
+    document.addEventListener('DOMContentLoaded', () => {
+        const pHistoryData = JSON.parse(document.getElementById('price-data').textContent);
+        renderPriceHistoryChart('priceHistoryChart', pHistoryData);
+    });
+</script>
+{% endblock %}

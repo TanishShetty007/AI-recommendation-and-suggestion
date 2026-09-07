@@ -1,0 +1,371 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}ShopSmart AI - Find the Best Products & Compare Prices{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="position-relative overflow-hidden py-5 bg-gradient-primary text-white d-flex align-items-center"
+    style="background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); min-height: 80vh;">
+    <!-- Background Blobs -->
+    <div class="position-absolute bg-white opacity-10 rounded-circle animate-on-scroll float-icon"
+        style="width: 350px; height: 350px; top: -100px; right: -50px;"></div>
+    <div class="position-absolute bg-white opacity-10 rounded-circle animate-on-scroll float-icon"
+        style="width: 250px; height: 250px; bottom: -50px; left: -80px; animation-delay: 2.5s;"></div>
+
+    <div class="container py-5 z-1">
+        <div class="row align-items-center">
+            <!-- Hero Left: Info & Search Bar -->
+            <div class="col-lg-7 text-center text-lg-start animate-on-scroll" data-animation="slide-up">
+                <h1 class="display-3 fw-extrabold mb-3"
+                    style="font-family: var(--font-heading); font-weight: 800; line-height: 1.15;">
+                    Find the Best Products <br><span class="text-warning">at the Best Prices</span>
+                </h1>
+                <p class="fs-5 mb-5 opacity-90 max-width-600">
+                    Compare prices instantly across Amazon, Flipkart, Reliance Digital, Croma, and Vijay Sales. Get
+                    buying recommendations backed by Google Gemini AI.
+                </p>
+
+                <!-- Search Bar Card -->
+                <div class="card p-2 border-0 shadow-lg glass-panel text-dark mb-4"
+                    style="border-radius: var(--radius-md); max-width: 650px;">
+                    <form action="{{ url_for('pages.search') }}" method="GET">
+                        <div class="row g-0 align-items-center">
+                            <!-- Category Select -->
+                            <div class="col-md-3 d-none d-md-block border-end py-1">
+                                <select
+                                    class="form-select border-0 bg-transparent text-secondary fw-semibold shadow-none"
+                                    name="category" style="cursor: pointer;">
+                                    <option value="All">All Categories</option>
+                                    <option value="Mobiles">Mobiles</option>
+                                    <option value="Laptops">Laptops</option>
+                                    <option value="Electronics">Electronics</option>
+                                </select>
+                            </div>
+                            <!-- Query Input -->
+                            <div class="col-md-6 col-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 bg-transparent text-secondary ps-3"><i
+                                            class="fas fa-search"></i></span>
+                                    <input type="text"
+                                        class="form-control border-0 bg-transparent py-3 shadow-none text-dark" name="q"
+                                        placeholder="Search for products, brands or models..." required>
+                                </div>
+                            </div>
+                            <!-- Submit Button -->
+                            <div class="col-md-3 col-3 text-end pe-2">
+                                <button type="submit" class="btn btn-gradient-primary w-100 py-3 shadow-none border-0"
+                                    style="border-radius: var(--radius-sm);">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Search Suggestions -->
+                <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-lg-start mb-4">
+                    <span class="text-white-50 align-self-center me-2">Trending:</span>
+                    <a href="{{ url_for('pages.search', q='iPhone 15') }}"
+                        class="btn btn-sm btn-outline-light border-0 bg-white bg-opacity-10 rounded-pill px-3">iPhone
+                        15</a>
+                    <a href="{{ url_for('pages.search', q='Galaxy S24') }}"
+                        class="btn btn-sm btn-outline-light border-0 bg-white bg-opacity-10 rounded-pill px-3">Galaxy
+                        S24</a>
+                    <a href="{{ url_for('pages.search', q='MacBook M2') }}"
+                        class="btn btn-sm btn-outline-light border-0 bg-white bg-opacity-10 rounded-pill px-3">MacBook
+                        Air</a>
+                </div>
+            </div>
+
+            <!-- Hero Right: Illustration / Floating Icons -->
+            <div class="col-lg-5 text-center d-none d-lg-block animate-on-scroll position-relative"
+                data-animation="fade-in" style="height: 400px;">
+                <div class="position-absolute start-50 top-50 translate-middle">
+                    <!-- Central shopping circle -->
+                    <div class="rounded-circle bg-white bg-opacity-10 d-flex justify-content-center align-items-center shadow-lg float-icon"
+                        style="width: 250px; height: 250px;">
+                        <i class="fas fa-robot fa-6x text-warning"></i>
+                    </div>
+                </div>
+                <!-- Floating Platform Badges -->
+                <span class="position-absolute bg-white text-dark shadow p-2 px-3 rounded-pill fw-bold float-icon"
+                    style="top: 15%; left: 10%;"><i class="fab fa-amazon text-warning me-2"></i>Amazon</span>
+                <span class="position-absolute bg-white text-blue shadow p-2 px-3 rounded-pill fw-bold float-icon"
+                    style="bottom: 15%; right: 10%; animation-delay: 2s; color: #0077b6;"><i
+                        class="fas fa-shopping-basket text-primary me-2"></i>Flipkart</span>
+                <span class="position-absolute bg-white text-danger shadow p-2 px-3 rounded-pill fw-bold float-icon"
+                    style="top: 60%; left: 0%; animation-delay: 1.5s;"><i
+                        class="fas fa-bolt text-danger me-2"></i>Deals</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Section -->
+<div class="container mt-n5 position-relative z-2">
+    <div class="row g-3 justify-content-center">
+        <!-- Stat Card 1 -->
+        <div class="col-lg-3 col-sm-6 animate-on-scroll" data-animation="slide-up">
+            <div class="glass-card p-4 d-flex align-items-center gap-3">
+                <div class="p-3 rounded-4 bg-primary bg-opacity-10 text-primary">
+                    <i class="fas fa-laptop-code fa-2x"></i>
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-0 text-dark">10K+</h3>
+                    <p class="text-secondary mb-0">Verified Products</p>
+                </div>
+            </div>
+        </div>
+        <!-- Stat Card 2 -->
+        <div class="col-lg-3 col-sm-6 animate-on-scroll" data-animation="slide-up" style="animation-delay: 0.1s;">
+            <div class="glass-card p-4 d-flex align-items-center gap-3">
+                <div class="p-3 rounded-4 bg-secondary bg-opacity-10 text-secondary">
+                    <i class="fas fa-store-alt fa-2x"></i>
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-0 text-dark">5+</h3>
+                    <p class="text-secondary mb-0">E-Commerce Stores</p>
+                </div>
+            </div>
+        </div>
+        <!-- Stat Card 3 -->
+        <div class="col-lg-3 col-sm-6 animate-on-scroll" data-animation="slide-up" style="animation-delay: 0.2s;">
+            <div class="glass-card p-4 d-flex align-items-center gap-3">
+                <div class="p-3 rounded-4 bg-accent bg-opacity-10 text-accent" style="color: var(--accent-color);">
+                    <i class="fas fa-users-cog fa-2x"></i>
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-0 text-dark">100%</h3>
+                    <p class="text-secondary mb-0">Happy Users</p>
+                </div>
+            </div>
+        </div>
+        <!-- Stat Card 4 -->
+        <div class="col-lg-3 col-sm-6 animate-on-scroll" data-animation="slide-up" style="animation-delay: 0.3s;">
+            <div class="glass-card p-4 d-flex align-items-center gap-3">
+                <div class="p-3 rounded-4 bg-success bg-opacity-10 text-success">
+                    <i class="far fa-smile-beam fa-2x"></i>
+                </div>
+                <div>
+                    <h3 class="fw-bold mb-0 text-dark">99%</h3>
+                    <p class="text-secondary mb-0">Satisfaction Rate</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Popular Categories -->
+<div class="container section-padding">
+    <div class="text-center animate-on-scroll mb-5" data-animation="fade-in">
+        <h2 class="heading-title text-dark">Popular Categories</h2>
+        <p class="text-secondary max-width-600 mx-auto">Browse products inside our key categories to start scanning
+            details.</p>
+    </div>
+
+    <div class="row g-3 justify-content-center text-center">
+        <!-- Mobiles -->
+        <div class="col-lg-2 col-md-4 col-6">
+            <a href="{{ url_for('pages.search', category='Mobiles') }}" class="text-decoration-none text-dark">
+                <div class="glass-card p-4 py-5 hover-scale">
+                    <i class="fas fa-mobile-alt fa-3x text-primary mb-3"></i>
+                    <h6 class="fw-bold">Mobiles</h6>
+                </div>
+            </a>
+        </div>
+        <!-- Laptops -->
+        <div class="col-lg-2 col-md-4 col-6">
+            <a href="{{ url_for('pages.search', category='Laptops') }}" class="text-decoration-none text-dark">
+                <div class="glass-card p-4 py-5 hover-scale">
+                    <i class="fas fa-laptop fa-3x text-secondary mb-3"></i>
+                    <h6 class="fw-bold">Laptops</h6>
+                </div>
+            </a>
+        </div>
+        <!-- Electronics -->
+        <div class="col-lg-2 col-md-4 col-6">
+            <a href="{{ url_for('pages.search', category='Electronics') }}" class="text-decoration-none text-dark">
+                <div class="glass-card p-4 py-5 hover-scale">
+                    <i class="fas fa-headphones-alt fa-3x text-accent mb-3"></i>
+                    <h6 class="fw-bold">Electronics</h6>
+                </div>
+            </a>
+        </div>
+        <!-- Fashion -->
+
+    </div>
+</div>
+</div>
+</div>
+
+<!-- Featured Deals Section -->
+<div class="container section-padding bg-body py-5 rounded-4 shadow-sm mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-4 px-2">
+        <div class="animate-on-scroll" data-animation="fade-in">
+            <h2 class="fw-bold text-dark mb-1">Featured Hot Deals</h2>
+            <p class="text-secondary mb-0">Direct price comparisons for popular hot choices today.</p>
+        </div>
+        <a href="{{ url_for('pages.search') }}" class="btn btn-outline-custom">View All Products</a>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        {% for p in featured %}
+        <div class="col-lg-3 col-md-6">
+            <div class="card glass-card h-100 border-0 p-3 position-relative">
+                <!-- Logged in toggle bookmark icon -->
+                <button type="button" class="wishlist-toggle-icon border-0 wishlist-toggle-btn"
+                    data-product-id="{{ p.id }}" aria-label="Add to Wishlist">
+                    <i class="far fa-heart"></i>
+                </button>
+
+                <!-- Product Image -->
+                <div class="product-card-img-wrap mb-3 text-center" style="height: 180px; text-align: center;">
+                    <img src="{{ p.image_url }}" alt="{{ p.name }}"
+                        style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                </div>
+
+                <!-- Rating -->
+                <div class="d-flex align-items-center gap-1 mb-2 text-warning" style="font-size: 0.85rem;">
+                    <i class="fas fa-star"></i>
+                    <span class="fw-semibold text-secondary ms-1">{{ p.rating }} ({{ p.review_count }})</span>
+                </div>
+
+                <!-- Product Title -->
+                <h5 class="card-title fw-bold text-dark mb-2"
+                    style="font-size: 1rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 42px;">
+                    {{ p.name }}
+                </h5>
+
+                <!-- Price List & Platforms -->
+                <div class="mb-4">
+                    {% set prices = [p.amazon_price, p.flipkart_price, p.reliance_price, p.croma_price,
+                    p.vijaysales_price] | select('number') | list %}
+                    {% if prices %}
+                    <div class="d-flex justify-content-between align-items-end mb-1">
+                        <span class="text-secondarySmall text-secondary" style="font-size: 0.8rem;">Starting
+                            Value</span>
+                        <span class="fw-bold text-gradient fs-5">Rs.{{ "{:,.2f}".format(prices|min) }}</span>
+                    </div>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle py-1 rounded"
+                        style="font-size: 0.75rem;">
+                        Save up to 10% vs Retail
+                    </span>
+                    {% else %}
+                    <span class="text-muted">Out of stock</span>
+                    {% endif %}
+                </div>
+
+                <!-- Footer Check/Button -->
+                <div class="d-flex justify-content-between align-items-center mt-auto gap-2">
+                    <label class="compare-checkbox-label">
+                        <input type="checkbox" class="compare-checkbox me-1" data-product-id="{{ p.id }}"> Compare
+                    </label>
+                    <a href="{{ url_for('pages.product_detail', product_key=p.product_key) }}"
+                        class="btn btn-gradient-primary btn-sm py-2 px-3 fw-bold">View Deal</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- AI Recommendation Highlit Section -->
+<div class="container section-padding">
+    <div class="row align-items-center g-5">
+        <!-- Text details -->
+        <div class="col-lg-5 animate-on-scroll" data-animation="slide-up">
+            <span class="badge bg-custom-ai mb-3"><i class="fas fa-robot me-2"></i>Gemini Generative
+                recommendations</span>
+            <h2 class="fw-bold mb-3 text-dark">Get Personalized Recommendations</h2>
+            <p class="text-secondary mb-4">
+                Confused which device fits your budget and task? Fill our 4-question interactive questionnaire, and let
+                Google Generative AI analyze specifications, features, and price tags to highlight your perfect choice.
+            </p>
+            <a href="{{ url_for('pages.recommendations') }}" class="btn btn-gradient-primary">Open AI Assistant</a>
+        </div>
+
+        <!-- Showcase cards -->
+        <div class="col-lg-7">
+            <div class="row g-3">
+                {% for p in ai_recs %}
+                <div class="col-md-6">
+                    <div class="glass-card p-3 border-start border-4 border-primary">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-primary-gradient py-1"
+                                style="background: var(--primary-gradient);">Score: 98%</span>
+                            <span class="badge bg-info-subtle text-info border border-info-subtle">{{ p.ai_badge
+                                }}</span>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-1">{{ p.name }}</h6>
+                        <p class="text-secondarySmall text-secondary mb-2" style="font-size: 0.8rem;">
+                            {{ p.ai_explanation }}
+                        </p>
+                        <a href="{{ url_for('pages.product_detail', product_key=p.product_key) }}"
+                            class="text-primary text-decoration-none fw-semibold" style="font-size: 0.85rem;">Read
+                            Review <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Why Choose Us -->
+<div class="container section-padding bg-body py-5 rounded-4 shadow-sm mb-5">
+    <div class="text-center animate-on-scroll mb-5" data-animation="fade-in">
+        <h2 class="heading-title text-dark">Why ShopSmart AI?</h2>
+        <p class="text-secondary max-width-600 mx-auto">Get access to premium comparing engines and notification hubs.
+        </p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- Feature 1 -->
+        <div class="col-md-4">
+            <div class="p-4 rounded-4 hover-scale border-0 text-center">
+                <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-circle mx-auto d-flex justify-content-center align-items-center"
+                    style="width:70px; height:70px;">
+                    <i class="fas fa-tags fa-2x"></i>
+                </div>
+                <h5 class="fw-bold text-dark mt-3 mb-2">Compare Prices</h5>
+                <p class="text-secondary">Scan 5 major electronic stores database in a click to see actual real-time
+                    pricing.</p>
+            </div>
+        </div>
+        <!-- Feature 2 -->
+        <div class="col-md-4">
+            <div class="p-4 rounded-4 hover-scale border-0 text-center">
+                <div class="p-3 bg-secondary bg-opacity-10 text-secondary rounded-circle mx-auto d-flex justify-content-center align-items-center"
+                    style="width:70px; height:70px;">
+                    <i class="fas fa-bell fa-2x"></i>
+                </div>
+                <h5 class="fw-bold text-dark mt-3 mb-2">Price Drop Alerts</h5>
+                <p class="text-secondary">Save custom target limits, and get immediately notified when pricing hits your
+                    threshold.</p>
+            </div>
+        </div>
+        <!-- Feature 3 -->
+        <div class="col-md-4">
+            <div class="p-4 rounded-4 hover-scale border-0 text-center">
+                <div class="p-3 bg-success bg-opacity-10 text-success rounded-circle mx-auto d-flex justify-content-center align-items-center"
+                    style="width:70px; height:70px;">
+                    <i class="fas fa-brain fa-2x"></i>
+                </div>
+                <h5 class="fw-bold text-dark mt-3 mb-2">AI Buying Verdict</h5>
+                <p class="text-secondary">Utilize Gemini to parse pros/cons and write overall synthesis verdict
+                    comparisons instantly.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Compare Sticky Drawer -->
+<div id="floating-compare-btn" class="position-fixed bottom-0 start-50 translate-middle-x p-3 mb-3 z-3 d-none">
+    <div class="glass-panel p-3 px-4 rounded-pill shadow-lg d-flex align-items-center gap-3 border border-primary">
+        <span class="text-dark fw-bold" style="font-size: 0.95rem;">
+            <i class="fas fa-columns text-primary me-2"></i>Compare: <span class="badge bg-primary">0</span> Products
+        </span>
+        <a href="/compare" class="btn btn-gradient-primary btn-sm rounded-pill px-4">Compare Now</a>
+        <button type="button" class="btn btn-link text-danger p-0 border-0 text-decoration-none fw-semibold"
+            onclick="clearComparison()" style="font-size: 0.85rem;">Clear</button>
+    </div>
+</div>
+{% endblock %}

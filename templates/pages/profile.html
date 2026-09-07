@@ -1,0 +1,105 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}My Profile - ShopSmart AI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-3 mb-4">
+            <div class="dashboard-sidebar p-3 py-4 animate-on-scroll" data-animation="fade-in">
+                <div class="text-center pb-4 mb-4 border-bottom">
+                    <img src="{{ current_user.avatar_url or 'https://api.dicebear.com/7.x/adventurer/svg?seed=Guest' }}"
+                        alt="Profile Avatar" class="rounded-circle border mb-3" width="80" height="80">
+                    <h5 class="fw-bold text-dark mb-1">{{ current_user.username }}</h5>
+                    <p class="text-secondarySmall text-secondary mb-0">{{ current_user.email }}</p>
+                </div>
+
+                <ul class="nav flex-column gap-2">
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.dashboard') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="fas fa-chart-pie me-2 text-secondary"></i> Overview Overview
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.wishlist') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="far fa-heart me-2 text-secondary"></i> My Wishlist
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.notifications') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="far fa-bell me-2 text-secondary"></i> Alerts History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.profile') }}"
+                            class="nav-link active rounded-pill px-3 py-2 text-decoration-none d-flex align-items-center">
+                            <i class="far fa-user me-2 text-primary"></i> <strong class="text-primary">Account
+                                Details</strong>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url_for('pages.settings') }}"
+                            class="nav-link rounded-pill px-3 py-2 text-decoration-none text-dark d-flex align-items-center">
+                            <i class="fas fa-sliders-h me-2 text-secondary"></i> preferences
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Details Input panel -->
+        <div class="col-lg-9">
+            <div class="card glass-card border-0 p-4 animate-on-scroll" data-animation="slide-up">
+                <h5 class="fw-bold text-dark mb-4"><i class="fas fa-user-edit text-primary me-2"></i>My Profile Details
+                </h5>
+
+                <form action="{{ url_for('pages.profile') }}" method="POST">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="username" class="form-label text-secondary fw-semibold">Username</label>
+                            <input type="text" class="form-control form-control-custom text-dark ps-3" id="username"
+                                name="username" value="{{ current_user.username }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label text-secondary fw-semibold">Email Address</label>
+                            <input type="email" class="form-control form-control-custom text-dark ps-3" id="email"
+                                name="email" value="{{ current_user.email }}" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="avatar_url" class="form-label text-secondary fw-semibold">Avatar Image URL</label>
+                        <input type="url" class="form-control form-control-custom text-dark ps-3" id="avatar_url"
+                            name="avatar_url" value="{{ current_user.avatar_url or '' }}"
+                            placeholder="https://api.dicebear.com/7.x/adventurer/svg?seed=yourname">
+                    </div>
+
+                    <hr class="my-4 text-secondary opacity-25">
+
+                    <h6 class="fw-bold text-dark mb-3"><i class="fas fa-key me-2 text-secondary"></i>Change Password
+                        (Optional)</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="password" class="form-label text-secondary fw-semibold">New Password</label>
+                            <input type="password" class="form-control form-control-custom text-dark ps-3" id="password"
+                                name="password" placeholder="••••••••">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="confirm_password" class="form-label text-secondary fw-semibold">Confirm New
+                                Password</label>
+                            <input type="password" class="form-control form-control-custom text-dark ps-3"
+                                id="confirm_password" name="confirm_password" placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-gradient-primary">Save Profile Alterations</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
