@@ -40,7 +40,7 @@ def search():
     brand = request.args.get('brand')
     sort_by = request.args.get('sort_by')
 
-    # Save to search query dashboard history if logged in or guest
+    # Save to search history if logged in
     if query:
         uid = current_user.id if current_user.is_authenticated else None
         sq = SearchQuery(user_id=uid, query=query)

@@ -1,58 +1,70 @@
 :root {
-    /* Color Palette */
-    --primary-color: #4361ee;
-    --primary-rgb: 67, 97, 238;
-    --secondary-color: #7209b7;
-    --secondary-rgb: 114, 9, 183;
-    --accent-color: #f77f00;
+    /* ── New Brand Color Palette ──────────────────────── */
+    --primary-color: #F3E308;          /* Vibrant Yellow */
+    --primary-rgb: 243, 227, 8;
+    --primary-dark: #c9bb00;           /* Darker yellow for hover */
+
+    --secondary-color: #6C8494;        /* Steel Blue-Grey */
+    --secondary-rgb: 108, 132, 148;
+
+    --accent-color: #B8BFC1;           /* Silver / Light Grey */
+    --accent-rgb: 184, 191, 193;
+
+    --dark-base: #2C4C5C;              /* Deep Teal-Navy */
+    --dark-base-rgb: 44, 76, 92;
+
+    /* Semantic Colors */
     --success-color: #06d6a0;
-    --warning-color: #ffb703;
-    
+    --warning-color: #F3E308;
+    --danger-color: #ef4444;
+    --info-color: #6C8494;
+
     /* Backgrounds */
-    --bg-light: #f4f6f9;
+    --bg-light: #f0f2f5;
     --card-light: #ffffff;
     --card-light-rgb: 255, 255, 255;
-    
-    /* Dark Mode Defaults */
-    --bg-dark: #0f172a;
-    --card-dark: #1e293b;
-    --card-dark-rgb: 30, 41, 59;
-    
-    /* Active colors - default light */
+
+    /* Dark Mode */
+    --bg-dark: #1a2e38;                /* Based on dark-base */
+    --card-dark: #2C4C5C;
+    --card-dark-rgb: 44, 76, 92;
+
+    /* Active theme colors (default = light) */
     --body-bg: var(--bg-light);
     --card-bg: var(--card-light);
     --card-bg-rgb: var(--card-light-rgb);
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --border-color: #e2e8f0;
-    
+    --text-primary: #1a2e38;
+    --text-secondary: #6C8494;
+    --border-color: #dde1e4;
+
     /* Typography */
     --font-heading: 'Poppins', sans-serif;
     --font-body: 'Poppins', sans-serif;
-    
+
     /* Shadows */
-    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-    --shadow-md: 0 8px 16px rgba(0,0,0,0.06);
-    --shadow-lg: 0 16px 32px rgba(0,0,0,0.08);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
-    
+    --shadow-sm: 0 2px 8px rgba(44, 76, 92, 0.08);
+    --shadow-md: 0 8px 24px rgba(44, 76, 92, 0.10);
+    --shadow-lg: 0 16px 40px rgba(44, 76, 92, 0.14);
+    --glass-shadow: 0 8px 32px 0 rgba(44, 76, 92, 0.12);
+
     /* Borders */
     --radius-sm: 8px;
     --radius-md: 16px;
     --radius-lg: 24px;
-    
+
     /* Gradients */
-    --primary-gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    --accent-gradient: linear-gradient(135deg, #f77f00 0%, #fcbf49 100%);
-    --card-gradient: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.3) 100%);
+    --primary-gradient: linear-gradient(135deg, #F3E308 0%, #c9bb00 100%);
+    --accent-gradient: linear-gradient(135deg, #6C8494 0%, #2C4C5C 100%);
+    --dark-gradient: linear-gradient(135deg, #2C4C5C 0%, #1a2e38 100%);
+    --card-gradient: linear-gradient(135deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.35) 100%);
 }
 
 [data-theme="dark"] {
     --body-bg: var(--bg-dark);
     --card-bg: var(--card-dark);
     --card-bg-rgb: var(--card-dark-rgb);
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --border-color: #334155;
-    --card-gradient: linear-gradient(135deg, rgba(30,41,59,0.7) 0%, rgba(30,41,59,0.3) 100%);
+    --text-primary: #e8eef2;
+    --text-secondary: #B8BFC1;
+    --border-color: #3d5f72;
+    --card-gradient: linear-gradient(135deg, rgba(44,76,92,0.75) 0%, rgba(26,46,56,0.5) 100%);
 }

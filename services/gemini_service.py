@@ -2,6 +2,8 @@ import json
 import google.generativeai as genai
 from config import Config
 
+GEMINI_MODEL = 'gemini-3.5-flash-lite'
+
 class GeminiService:
     _configured = False
 
@@ -25,7 +27,7 @@ class GeminiService:
         """Generates a premium summary of a product using Gemini or a fallback heuristic."""
         if GeminiService._initialize_gemini():
             try:
-                model = genai.GenerativeModel('gemini-2.5-flash')
+                model = genai.GenerativeModel(GEMINI_MODEL)
                 prompt = (
                     f"You are a professional tech and product reviewer. Summarize the following product in a premium, engaging way:\n"
                     f"Name: {product_name}\n"
@@ -66,7 +68,7 @@ class GeminiService:
 
         if GeminiService._initialize_gemini():
             try:
-                model = genai.GenerativeModel('gemini-2.5-flash')
+                model = genai.GenerativeModel(GEMINI_MODEL)
                 prompt = (
                     f"Analyze this product and list exactly 3 pros and 3 cons. Format the output strictly as a JSON object with keys 'pros' and 'cons', where each key contains a list of 3 strings. Do not include markdown formatting.\n"
                     f"Product: {product_name}\n"
@@ -133,7 +135,7 @@ class GeminiService:
 
         if GeminiService._initialize_gemini():
             try:
-                model = genai.GenerativeModel('gemini-2.5-flash')
+                model = genai.GenerativeModel(GEMINI_MODEL)
                 prompt = (
                     f"Write a comparison verdict for these products: {json.dumps(names)}.\n"
                     f"Here are their specs: {json.dumps(details)}.\n"
@@ -166,7 +168,7 @@ class GeminiService:
         """Returns personalized recommendation advice based on user filters."""
         if GeminiService._initialize_gemini():
             try:
-                model = genai.GenerativeModel('gemini-2.5-flash')
+                model = genai.GenerativeModel(GEMINI_MODEL)
                 prompt = (
                     f"A user wants an AI product recommendation.\n"
                     f"Category: {category}\n"

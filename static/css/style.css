@@ -39,21 +39,21 @@ body {
 /* Gradients & Buttons */
 .btn-gradient-primary {
     background: var(--primary-gradient);
-    color: #fff !important;
+    color: var(--dark-base) !important;  /* Dark text on yellow */
     border: none;
-    font-weight: 600;
+    font-weight: 700;
     border-radius: var(--radius-sm);
     padding: 10px 24px;
-    box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.3);
+    box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.35);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
 }
 
 .btn-gradient-primary:hover {
-    box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.5);
+    box-shadow: 0 6px 20px rgba(var(--primary-rgb), 0.55);
     transform: translateY(-2px);
-    opacity: 0.95;
+    opacity: 0.93;
 }
 
 .btn-gradient-accent {
@@ -63,12 +63,12 @@ body {
     font-weight: 600;
     border-radius: var(--radius-sm);
     padding: 10px 24px;
-    box-shadow: 0 4px 15px rgba(247, 127, 0, 0.3);
+    box-shadow: 0 4px 15px rgba(var(--dark-base-rgb), 0.25);
     transition: all 0.3s ease;
 }
 
 .btn-gradient-accent:hover {
-    box-shadow: 0 6px 20px rgba(247, 127, 0, 0.5);
+    box-shadow: 0 6px 20px rgba(var(--dark-base-rgb), 0.4);
     transform: translateY(-2px);
     opacity: 0.95;
 }
@@ -99,10 +99,10 @@ body {
 }
 
 .badge-custom-ai {
-    background: linear-gradient(135deg, #ff007f 0%, #7209b7 100%);
-    color: #fff;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: var(--dark-base);
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     padding: 5px 10px;
     border-radius: 50px;
 }
