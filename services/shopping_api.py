@@ -1,15 +1,19 @@
 import requests
-
-API_KEY="4452b7105412acbd0f341fe6602dad80fcbf12f7c5bcede2b830c333eb3a9611"
+from config import Config
 
 def search_products(query):
 
-    url="https://serpapi.com/search.json"
+    url = "https://serpapi.com/search.json"
 
-    params={
-        "engine":"google_shopping",
-        "q":query,
-        "api_key":API_KEY,
+    api_key = Config.SERPAPI_KEY
+    if not api_key:
+        print("Warning: SERPAPI_KEY is not set.")
+        return {}
+
+    params = {
+        "engine": "google_shopping",
+        "q": query,
+        "api_key": api_key,
         "location": "Mumbai, Maharashtra, India",
         "gl": "in",
         "hl": "en"

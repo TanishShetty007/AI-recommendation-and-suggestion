@@ -33,8 +33,9 @@ class Config:
         "pool_pre_ping": True,   # Validate connection health before use
     }
 
-    # ── AI API ────────────────────────────────────────────────────────────────
-    GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+    # ── AI & External APIs ────────────────────────────────────────────────────
+    GEMINI_API_KEY  = os.environ.get('GEMINI_API_KEY', '')
+    SERPAPI_KEY     = os.environ.get('SERPAPI_KEY', '')
 
     # ── Flask Production Settings ─────────────────────────────────────────────
     DEBUG    = os.environ.get('FLASK_DEBUG', '0') == '1'
